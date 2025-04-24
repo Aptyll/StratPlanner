@@ -1,0 +1,339 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #333333;
+}
+
+.navbar {
+    width: 90px;
+    height: 100vh;
+    background-color: #222;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px 15px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.nav-button {
+    width: 65px;
+    height: 65px;
+    border: 3px solid #444;
+    border-radius: 10px;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+}
+
+/* Hotkey indicator */
+.hotkey {
+    position: absolute;
+    top: 3px;
+    left: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #aaa;
+}
+
+.nav-button:hover {
+    background-color: #444;
+    border-color: #666;
+    transform: translateY(-2px);
+}
+
+.nav-button.active {
+    background-color: #555;
+    border-color: #888;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.nav-button svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* Color picker styling */
+.color-picker-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.color-indicator {
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #666;
+    background-color: #74E787; /* Default color */
+}
+
+/* Color system for pen tool */
+.color-system {
+    display: none; /* Hidden by default, shown when pen is active */
+    flex-direction: column;
+    gap: 15px;
+    margin: 12px 0;
+    width: 65px;
+    align-items: center;
+}
+
+/* Selection pod for left/right click colors */
+.selection-pod {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px;
+    border: 2px solid #888;
+    border-radius: 10px;
+    background-color: #444;
+    width: 55px;
+}
+
+.pod-slot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #666;
+    background-color: #333;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.pod-slot.drag-over {
+    border-color: white;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.pod-slot.has-color {
+    border-color: #888;
+}
+
+.slot-label {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 16px;
+    height: 16px;
+    background-color: #222;
+    border: 1px solid #666;
+    border-radius: 50%;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+/* Color palette */
+.color-palette {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.palette-label {
+    font-size: 10px;
+    color: #aaa;
+    text-align: center;
+}
+
+.palette-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 65px;
+}
+
+.color-swatch {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid #666;
+    cursor: grab;
+    transition: all 0.2s ease;
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+    border-color: #888;
+}
+
+.color-swatch.dragging {
+    opacity: 0.7;
+    transform: scale(1.1);
+}
+
+/* Color classes */
+.blue-color {
+    background-color: #66b3ff; /* Light blue */
+}
+
+.red-color {
+    background-color: #ff6666; /* Light red */
+}
+
+.green-color {
+    background-color: #74E787; /* Light green */
+}
+
+/* Custom color swatches */
+.custom-color {
+    position: relative;
+}
+
+.custom-color .remove-color {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    background-color: #333;
+    border: 1px solid #666;
+    border-radius: 50%;
+    font-size: 10px;
+    line-height: 13px;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    display: none;
+    z-index: 5;
+}
+
+.custom-color:hover .remove-color {
+    display: block;
+}
+
+/* Color picker popup */
+.color-picker-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.color-picker-content {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+#color-picker-container {
+    margin-bottom: 15px;
+}
+
+#add-color-btn {
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+#add-color-btn:hover {
+    background-color: #666;
+}
+
+.main-content {
+    position: absolute;
+    left: 90px;
+    top: 0;
+    width: calc(100% - 90px);
+    height: 100vh;
+    overflow: hidden;
+    background-color: #333333;
+}
+
+.map-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #333333;
+    overflow: hidden;
+}
+
+#battlemap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: move;
+    background-color: transparent;
+}
+
+.zoom-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    gap: 10px;
+}
+
+.zoom-controls button {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: #444;
+    border: 2px solid #666;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.zoom-controls button:hover {
+    background-color: #555;
+    border-color: #888;
+    transform: translateY(-2px);
+}
+
+#reset-zoom {
+    width: auto;
+    border-radius: 8px;
+    padding: 0 15px;
+}
